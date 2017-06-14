@@ -96,6 +96,7 @@ const findElement = function(structure, elements) {
     single: start.hasSingleTag,
     attributes: arrayToJson(start.attributes),
     grammar: start.grammar,
+    parseGrammer: start.parseGrammer,
     point: {
       start: start.point.start,
       end: end.point.end

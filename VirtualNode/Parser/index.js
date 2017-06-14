@@ -6,10 +6,9 @@ import tokenize from './tokenize';
 let struct_id = 0;
 
 /**
- * 分析程序
+ * 解构程序
  * 用于解析出html的结构体
  */
-
 export default class Parser {
 
   constructor(context) {
@@ -21,8 +20,8 @@ export default class Parser {
     this.parts = hasClose(context) ? tokenize(context) : context;
   }
 
-  string() {
+  string(state = {}) {
     const {tree, elements, texts} = this.parts;
-    return outputHtml(tree, elements, texts);
+    return outputHtml(tree, elements, texts, state);
   }
 }

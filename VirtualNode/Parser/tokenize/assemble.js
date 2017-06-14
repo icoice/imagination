@@ -4,8 +4,8 @@ import loop from '../../common/loop';
 
 // 字符结构体
 export default function(str) {
-  const structure = [];
   // 标签的界定符
+  const structure = [];
   const tagLeftDelimiter = '\u{003C}';
   const tagRightDelimiter = '\u{003E}';
 
@@ -15,7 +15,6 @@ export default function(str) {
 
   loop(str, (letter, code) => {
     let debris;
-
     // Tag的左定界符
     if (letter === tagLeftDelimiter) {
       // 结束前面的text采集
@@ -23,17 +22,13 @@ export default function(str) {
         debris = arrayToString(collectText);
         collectText = [];
       }
-
       collectTags.push(letter);
-
       meetDelimiter = true;
     // Tag的右定界符
     } else if (letter === tagRightDelimiter && meetDelimiter) {
       meetDelimiter = false;
-
       collectTags.push(letter);
       debris = arrayToString(collectTags);
-
       collectTags = [];
     // Tag内的字符集
     } else if (meetDelimiter) {
@@ -41,7 +36,6 @@ export default function(str) {
     } else if (!meetDelimiter) {
       collectText.push(letter);
     }
-
     if (debris) {
       structure.push(struct(code, debris));
     }

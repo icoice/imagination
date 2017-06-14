@@ -14,6 +14,7 @@ export default function(structure) {
           end: struct.point.end
         },
         grammar: struct.grammar,
+        parseGrammer: struct.parseGrammer,
         length: struct.symbol.length
       };
     }

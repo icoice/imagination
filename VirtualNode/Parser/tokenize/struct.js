@@ -2,85 +2,56 @@ import createStructId from '../../common/createStructId';
 import hasTag from '../../common/hasTag';
 import hasEndTag from '../../common/hasEndTag';
 import hasSingleTag from '../../common/hasSingleTag';
-import fragmentize from '../../common/fragmentize';
+import statement from '../statement'
 
-// 创建结构体
-export default function(code, str) {
-  const struct = {
-    // 字符集
-    symbol: str,
-    // 节点类型
-    type: hasTag(str) ? 'element' : 'text',
-    // 占位点
-    point: {
-      start: code + 1 - str.length,
-      end: code
-    }
-  };
+const fragmentize = function(str) {
+  const expression = /[\w_]+\="[^\=""]{0,}"/ig;
+  const placeholder = /\{[^\{\}]{0,}\}/ig;
+  const placeholders = str.match(placeholder);
+  const debris = str.match(expression);
+
+  let tagName = str.replace(expression, '');
+  tagName = tagName.replace(placeholder, '');
+  tagName = tagName.replace(/[<>\/\s\{\}\$]+/g, '');
+
+  return {
+    tagName,
+    attributes: debris ? debris : [],
+    grammar: placeholders ? placeholders : []
+  }
+}
+
+const format = (code, str) => ({
+  symbol: str, // 字符集
+  type: hasTag(str) ? 'element' : 'text', // 节点类型
+  point: { // 占位点
+    start: code + 1 - str.length, // 起点
+    end: code // 结点
+  }
+})
+
+export default function(code, str) { // 创建结构体
+  const struct = format(code, str);
+  const debris = fragmentize(str); // 字符碎片
   const {point} = struct;
 
-  // 结构体Id
-  struct.id = createStructId(point);
-
-  // 字符碎片
-  const debris = fragmentize(str);
-
-  struct.grammar = debris.grammar;
-  struct.parseGrammer = {}
-
-  struct.grammar.map(statement => {
-    let defVal = null
-
-    statement = statement.replace(/[\\$\\{\\}]+/g, '');
-
-    let key = statement
-
-    //三元运算符
-    if (/[\w\d\s]+\?[\w\d\s]+:[\w\d\s]+/.test(statement)) {
-      key = statement.replace(/\s/g, '').split('?');
-      defVal = key[1].split(':');
-      defVal[0] = {
-        key: defVal[0],
-        value: defVal[0]
-      }
-      defVal[1] = {
-        key: defVal[1],
-        value: defVal[1]
-      }
-      key = key[0];
-    }
-
-    //对象
-    if (/\w[\w\d\s$_]\.[\w\s\d\._$]+/g.test(statement)) {
-      key = statement.split('.');
-      defVal = {
-        chain: key.slice(1, key.length),
-        value: null
-      }
-      key = key.shift()
-    }
-
-    if (/^[\w\$_]{1}[\w\d]*$/.test(key)) {
-      struct.parseGrammer[key] = defVal
-    }
+  struct.id = createStructId(point); // 结构体Id
+  struct.grammar = debris.grammar; // 语句
+  struct.parseGrammer = [];
+  struct.grammar.map(sentence => {
+    struct.parseGrammer.push(statement(sentence.replace(/[\{\}\$]+/g, '')));
   });
-
-  console.log(struct.parseGrammer)
 
   if (struct.type !== 'element') {
     return struct;
   }
 
-  //是否为单标记
-  struct.hasSingleTag = hasSingleTag(str);
-  //是否为结束标记
-  struct.hasEndTag = hasEndTag(str);
+  struct.hasSingleTag = hasSingleTag(str); // 是否为单标记
+  struct.hasEndTag = hasEndTag(str); // 是否为结束标记
+  struct.name = debris.tagName; // 标签名称
 
-  struct.name = debris.tagName;
-
-  // 非结束标签
   if (!struct.hasEndTag) {
-    struct.attributes = debris.attributes;
+    struct.attributes = debris.attributes; // 添加属性
   }
 
   return struct;

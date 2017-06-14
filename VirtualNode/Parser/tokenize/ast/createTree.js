@@ -27,7 +27,7 @@ function context(elements, texts) {
 
   // 区分所有元素的层级关系
   each(elements, (x, xid) => {
-    if(!root){
+    if (!root) {
       root = x;
       rootId = xid;
     }
@@ -82,7 +82,6 @@ function context(elements, texts) {
 
 function fold(struct, elements, texts) {
   const tmp = [];
-
   let nid;
 
   // 升序排列
@@ -96,7 +95,6 @@ function fold(struct, elements, texts) {
     const t = elements[nid] || texts[nid] || struct;
     const {nodeType, children, point} = t;
     const n = fetchStruct(nid, nodeType, children ? [].concat(children) : children, point);
-
     if (nodeType === ELEMENT_NODE) {
       fold(...[n, elements, texts]);
       tmp.push(n);
@@ -107,7 +105,6 @@ function fold(struct, elements, texts) {
 
   struct.children = tmp;
   struct.children.sort((a, b) => a.point.start - b.point.start);
-
   return struct;
 }
 
@@ -115,8 +112,6 @@ export default function(elements, texts) {
   const {root, rootId} = context(elements, texts);
   const {nodeType, children, point} = root;
   let struct = fetchStruct(rootId, nodeType, children, point);
-
   struct = fold(struct, elements, texts);
-
   return struct;
 }

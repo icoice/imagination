@@ -118,8 +118,8 @@ export default class Packet {
   }
 
   //输出内容
-  output() {
+  output(state) {
     const {structure} = this;
-    return encodeNode(structure.string());
+    return encodeNode(structure.string(state));
   }
 }

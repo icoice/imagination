@@ -114,18 +114,21 @@ export default class VirtualNode {
 
   //渲染
   render(parent) {
-    const {_node_pack, _render_times, _node_events} = this;
+    const {_node_pack, _render_times, _node_events, state} = this;
     const {willMount, shouldUpdate} = _node_events;
     const rendered = this.getRendered();
 
     if (!rendered) {
-      this.setRendered(_node_pack.output());
+      this.setRendered(_node_pack.output(state));
     }
     if (!parent || !hasElem(parent)) {
       return rendered;
     }
-
-    _render_times > 0 ? shouldUpdate.map(cb => cb.call(this)) : willMount.map(cb => cb.call(this));
+    if (_render_times > 0) {
+      shouldUpdate.map(cb => cb.call(this));
+    } else {
+      willMount.map(cb => cb.call(this));
+    }
 
     parent.innerHTML = this.getRendered();
 
