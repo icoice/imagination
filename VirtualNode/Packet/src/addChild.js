@@ -1,8 +1,8 @@
-import { CHILD_ID_PREFIX } from './constant'
-import hasPacket from '../common/hasPacket'
-import hasString from '../common/hasString'
-import hasUndefined from '../common/hasUndefined'
-import each from '../common/each'
+import { CHILD_ID_PREFIX } from '../constant'
+import hasPacket from '../../common/hasPacket'
+import hasString from '../../common/hasString'
+import hasUndefined from '../../common/hasUndefined'
+import each from '../../common/each'
 
 export default (type, child, parts) => {
   const {tree, elements, texts} = parts;

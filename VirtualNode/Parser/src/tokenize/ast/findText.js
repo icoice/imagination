@@ -1,4 +1,4 @@
-import { TEXT_NODE } from '../../constant';
+import { TEXT_NODE } from '../../../constant';
 
 // 找到文本
 export default function(structure) {
@@ -14,7 +14,7 @@ export default function(structure) {
           end: struct.point.end
         },
         grammar: struct.grammar,
-        parseGrammer: struct.parseGrammer,
+        parseGrammar: struct.parseGrammar,
         length: struct.symbol.length
       };
     }

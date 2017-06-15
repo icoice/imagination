@@ -1,6 +1,6 @@
 import struct from './struct';
-import arrayToString from '../../common/arrayToString';
-import loop from '../../common/loop';
+import arrayToString from '../../../common/arrayToString';
+import loop from '../../../common/loop';
 
 // 字符结构体
 export default function(str) {

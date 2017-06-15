@@ -1,6 +1,6 @@
-import arrayToString from '../../../common/arrayToString';
-import arrayToJson from '../../../common/arrayToJson';
-import { ELEMENT_NODE } from '../../constant';
+import arrayToString from '../../../../common/arrayToString';
+import arrayToJson from '../../../../common/arrayToJson';
+import { ELEMENT_NODE } from '../../../constant';
 
 // 找到层级最小的开始标签
 function findMinimuStartTag(structure) {
@@ -96,7 +96,7 @@ const findElement = function(structure, elements) {
     single: start.hasSingleTag,
     attributes: arrayToJson(start.attributes),
     grammar: start.grammar,
-    parseGrammer: start.parseGrammer,
+    parseGrammar: start.parseGrammar,
     point: {
       start: start.point.start,
       end: end.point.end

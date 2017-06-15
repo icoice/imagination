@@ -11,9 +11,16 @@ const state = {
   theme: 'tm-im-tab',
   isShow: false,
   isSelect: 'man',
+  empty: 'is-empty',
   sex: {
     man: '0',
-    male: '1'
+    male: '1',
+    desc: {
+      man: 0,
+      desc: {
+        male: 1
+      }
+    }
   },
   views: {
     tab1: 'test',

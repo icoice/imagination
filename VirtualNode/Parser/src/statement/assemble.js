@@ -1,10 +1,13 @@
 const variableRule = /^[\w\$]+[\w\d_\[\]\.']*$/
-const readVariableRule = /^[\w\$]+[\w\d_]*\[.+\]$/
+const readVariableRule = /\[.+\]/g
 const terneryRule = /^.+\?.+:.+$/
+const stringRule = /^'.+'$/
 
-
-export default {
-
+const assemble = {
+  // 0级、字符
+  stringOperator(str) {
+    return stringRule.test(str) ? str.replace(/'/g, '') : null;
+  },
   // 0级、变量
   variableOperator(str) {
     if (!variableRule.test(str)) {
@@ -17,19 +20,32 @@ export default {
 
     str = str.replace(/\s+/g, '');
 
-    const variables = str.split('.').map(v => {
+    struct.sentence = str.split('.').map(v => {
       const variable = {
-        key: v,
-        expression: null
+        type: 'variable',
+        sentence: {
+          key: v.replace(readVariableRule, ''),
+          expression: null
+        }
       }
-      // 读取对象属性，包含其表达式（布尔运算、三元运算、四则运算、函数调用以及混合使用）
+
       if (readVariableRule.test(v)) {
-        variable.expression = v.match(readVariableRule);
+        const {sentence} = variable;
+        const expression = v.match(readVariableRule);
+        sentence.expression = expression.map(exp => {
+          const statement = exp.replace(/[\[\]]+/g, '');
+          if (stringRule.test(statement)) {
+            return statement;
+          } else {
+            return parseStatement(statement);
+          }
+        });
       }
+
       return variable;
     });
 
-    return variables;
+    return struct;
   },
 
   // 0级、函数
@@ -85,8 +101,20 @@ export default {
     answersStruct.push(terneryRule.test(falseAnswer) ?
       this.terneryOperator(falseAnswer) : falseAnswer);
 
-    struct.sentence[condition] = answersStruct;
+    struct.sentence = {
+      key: condition,
+      expression: answersStruct
+    }
 
     return struct;
   }
 }
+
+const parseStatement = sentence => {
+  let struct = assemble.stringOperator(sentence);
+  struct = !struct ? assemble.variableOperator(sentence) : struct;
+  struct = !struct ? assemble.terneryOperator(sentence) : struct;
+  return struct;
+}
+
+export default parseStatement;

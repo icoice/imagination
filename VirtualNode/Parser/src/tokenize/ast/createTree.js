@@ -1,6 +1,6 @@
-import each from '../../../common/each';
-import clearArrayRepeat from '../../../common/clearArrayRepeat';
-import { ELEMENT_NODE, TEXT_NODE } from '../../constant';
+import each from '../../../../common/each';
+import clearArrayRepeat from '../../../../common/clearArrayRepeat';
+import { ELEMENT_NODE, TEXT_NODE } from '../../../constant';
 
 function fetchStruct(id, type, children, point) {
   const struct = {

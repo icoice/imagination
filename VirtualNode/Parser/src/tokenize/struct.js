@@ -1,8 +1,8 @@
-import createStructId from '../../common/createStructId';
-import hasTag from '../../common/hasTag';
-import hasEndTag from '../../common/hasEndTag';
-import hasSingleTag from '../../common/hasSingleTag';
-import statement from '../statement'
+import createStructId from '../../../common/createStructId';
+import hasTag from '../../../common/hasTag';
+import hasEndTag from '../../../common/hasEndTag';
+import hasSingleTag from '../../../common/hasSingleTag';
+import statement from '../statement';
 
 const fragmentize = function(str) {
   const expression = /[\w_]+\="[^\=""]{0,}"/ig;
@@ -37,9 +37,9 @@ export default function(code, str) { // 创建结构体
 
   struct.id = createStructId(point); // 结构体Id
   struct.grammar = debris.grammar; // 语句
-  struct.parseGrammer = [];
+  struct.parseGrammar = [];
   struct.grammar.map(sentence => {
-    struct.parseGrammer.push(statement(sentence.replace(/[\{\}\$]+/g, '')));
+    struct.parseGrammar.push(statement(sentence.replace(/[\{\}\$]+/g, '')));
   });
 
   if (struct.type !== 'element') {

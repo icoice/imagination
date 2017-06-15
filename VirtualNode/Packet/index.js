@@ -5,7 +5,7 @@ import hasString from '../common/hasString'
 import Parser from '../Parser'
 import { ELEMENT_NODE } from '../Parser/constant'
 import { PACK_ID_PREFIX } from './constant'
-import addChild from './addChild'
+import addChild from './src/addChild'
 
 let packet_id = 0;
 

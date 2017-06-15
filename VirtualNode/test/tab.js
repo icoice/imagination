@@ -14,5 +14,6 @@ export default `<div class="tab {$isShow ? show : no-show} {$theme}">
     {$sex[isSelect]}
     {$sex['man']}
     {$sex.desc['man']}
+    {$sex.desc.desc['male']}
   </tab-view>
 </div>`;
