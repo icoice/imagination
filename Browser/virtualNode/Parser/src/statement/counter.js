@@ -15,7 +15,7 @@ const countVariableRes = function(sentence, state) {
   let {key, expression} = sentence.shift().sentence;
   let result = state[key];
 
-  expression && expression.map((attrName, code) => {
+  result && expression && expression.map((attrName, code) => {
     const key = counter(attrName, state);
     result = result[key];
   });

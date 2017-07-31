@@ -18,7 +18,6 @@ export default class Parser {
 
     this.structId = `_struct_id_${struct_id++}`;
     this.parts = hasClose(context) ? tokenize(context) : context;
-    console.log(this.parts);
   }
 
   string(state = {}) {
